@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const projects = [
@@ -81,9 +81,8 @@ const skills = [
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
-  const heroCardRef = useRef(null)
-  const shineRef = useRef(null)
-  const sectionsRef = useRef([])
+  const canvasRef = useRef(null)
+  const mouseRef = useRef({ x: -1000, y: -1000 })
   const cardsRef = useRef([])
 
   const scrollTo = (id) => {
@@ -106,20 +105,109 @@ function App() {
     requestAnimationFrame(step)
   }
 
-  /* ---- Mouse-follow glass shine ---- */
-  const handleMouseMove = useCallback((e) => {
-    const card = heroCardRef.current
-    const shine = shineRef.current
-    if (!card || !shine) return
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    shine.style.opacity = '1'
-    shine.style.background = `radial-gradient(circle 250px at ${x}px ${y}px, rgba(255,255,255,0.07) 0%, transparent 100%)`
-  }, [])
+  /* ---- Full-page particle canvas ---- */
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    let animId
 
-  const handleMouseLeave = useCallback(() => {
-    if (shineRef.current) shineRef.current.style.opacity = '0'
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const handleMouseMove = (e) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY }
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+
+    const PARTICLE_COUNT = 60
+    const TRAIL_COUNT = 12
+    const particles = []
+    const trail = []
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        baseX: Math.random() * window.innerWidth,
+        baseY: Math.random() * window.innerHeight,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.4 + 0.1,
+        vx: 0,
+        vy: 0,
+      })
+    }
+
+    for (let i = 0; i < TRAIL_COUNT; i++) {
+      trail.push({ x: -1000, y: -1000, opacity: 0 })
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const mx = mouseRef.current.x
+      const my = mouseRef.current.y
+
+      /* trail dots follow cursor with delay */
+      for (let i = trail.length - 1; i > 0; i--) {
+        trail[i].x += (trail[i - 1].x - trail[i].x) * 0.35
+        trail[i].y += (trail[i - 1].y - trail[i].y) * 0.35
+        trail[i].opacity = trail[i - 1].opacity * 0.7
+      }
+      trail[0].x += (mx - trail[0].x) * 0.5
+      trail[0].y += (my - trail[0].y) * 0.5
+      trail[0].opacity = 1
+
+      for (const t of trail) {
+        if (t.opacity < 0.01) continue
+        ctx.beginPath()
+        ctx.arc(t.x, t.y, 2, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(245, 158, 11, ${t.opacity * 0.6})`
+        ctx.fill()
+      }
+
+      /* scattered particles attracted to cursor */
+      for (const p of particles) {
+        const dx = mx - p.x
+        const dy = my - p.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        const pullRadius = 200
+
+        if (dist < pullRadius) {
+          const force = (1 - dist / pullRadius) * 0.04
+          p.vx += dx * force
+          p.vy += dy * force
+        }
+
+        /* return to base position */
+        p.vx += (p.baseX - p.x) * 0.008
+        p.vy += (p.baseY - p.y) * 0.008
+
+        /* damping */
+        p.vx *= 0.92
+        p.vy *= 0.92
+
+        p.x += p.vx
+        p.y += p.vy
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(245, 158, 11, ${p.opacity})`
+        ctx.fill()
+      }
+
+      animId = requestAnimationFrame(animate)
+    }
+    animate()
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
 
   /* ---- Scroll-reveal with IntersectionObserver ---- */
@@ -219,6 +307,8 @@ function App() {
 
   return (
     <>
+      <canvas ref={canvasRef} className="particle-canvas"></canvas>
+
       {/* Navbar */}
       <nav className="navbar">
         <div className="container">
@@ -235,13 +325,7 @@ function App() {
       {/* Hero */}
       <section id="hero" className="hero">
         <div className="container">
-          <div
-            className="hero-card"
-            ref={heroCardRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="glass-shine" ref={shineRef}></div>
+          <div className="hero-card">
             <div className="hero-text">
               <p className="hero-greeting">Hello, I'm</p>
               <h1>
