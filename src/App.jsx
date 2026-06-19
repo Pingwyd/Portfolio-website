@@ -142,22 +142,22 @@ function App() {
 
   /* ---- Active section tracking ---- */
   useEffect(() => {
-    const sections = ['hero', 'skills', 'projects', 'contact']
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
-        })
-      },
-      { threshold: 0.15, rootMargin: '-72px 0px -20% 0px' }
-    )
-    sections.forEach((id) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
+    const handleScroll = () => {
+      const sections = ['hero', 'skills', 'projects', 'contact']
+      const offset = 120
+      let current = 'hero'
+      for (const id of sections) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        if (el.getBoundingClientRect().top <= offset) {
+          current = id
+        }
+      }
+      setActiveSection(current)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   /* ---- Click ripple ---- */
