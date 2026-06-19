@@ -126,12 +126,12 @@ function App() {
 
     const PARTICLE_COUNT = 500
     const TRAIL_COUNT = 20
-    const DRIFT_SPEED = 0.3        // constant movement speed of particles
-    const DRIFT_WANDER = 0.02      // how much particles change direction randomly
+    const DRIFT_SPEED = 0.6        // constant movement speed of particles
+    const DRIFT_WANDER = 0.06      // how much particles change direction randomly
     const PULL_RADIUS = 200        // mouse attraction radius (px)
     const PULL_STRENGTH = 0.04     // how strongly mouse pulls particles
-    const RETURN_FORCE = 0.008     // how fast particles drift back to base position
-    const DAMPING = 0.92           // velocity decay (lower = more drag)
+    const RETURN_FORCE = 0.002     // how fast particles drift back to base position
+    const DAMPING = 0.94           // velocity decay (lower = more drag)
     const particles = []
     const trail = []
 
@@ -180,8 +180,8 @@ function App() {
       for (const p of particles) {
         /* constant wandering drift */
         p.angle += (Math.random() - 0.5) * DRIFT_WANDER * 2
-        p.vx += Math.cos(p.angle) * DRIFT_SPEED * 0.1
-        p.vy += Math.sin(p.angle) * DRIFT_SPEED * 0.1
+        p.vx += Math.cos(p.angle) * DRIFT_SPEED * 0.2
+        p.vy += Math.sin(p.angle) * DRIFT_SPEED * 0.2
 
         /* mouse attraction */
         const dx = mx - p.x
