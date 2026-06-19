@@ -124,8 +124,14 @@ function App() {
     }
     window.addEventListener('mousemove', handleMouseMove)
 
-    const PARTICLE_COUNT = 80
-    const TRAIL_COUNT = 14
+    const PARTICLE_COUNT = 500
+    const TRAIL_COUNT = 20
+    const DRIFT_SPEED = 0.3        // constant movement speed of particles
+    const DRIFT_WANDER = 0.02      // how much particles change direction randomly
+    const PULL_RADIUS = 200        // mouse attraction radius (px)
+    const PULL_STRENGTH = 0.04     // how strongly mouse pulls particles
+    const RETURN_FORCE = 0.008     // how fast particles drift back to base position
+    const DAMPING = 0.92           // velocity decay (lower = more drag)
     const particles = []
     const trail = []
 
@@ -137,8 +143,9 @@ function App() {
         baseY: Math.random() * window.innerHeight,
         size: Math.random() * 1.8 + 0.4,
         opacity: Math.random() * 0.25 + 0.08,
-        vx: 0,
-        vy: 0,
+        vx: (Math.random() - 0.5) * DRIFT_SPEED,
+        vy: (Math.random() - 0.5) * DRIFT_SPEED,
+        angle: Math.random() * Math.PI * 2,
       })
     }
 
@@ -171,24 +178,29 @@ function App() {
 
       /* scattered particles attracted to cursor */
       for (const p of particles) {
+        /* constant wandering drift */
+        p.angle += (Math.random() - 0.5) * DRIFT_WANDER * 2
+        p.vx += Math.cos(p.angle) * DRIFT_SPEED * 0.1
+        p.vy += Math.sin(p.angle) * DRIFT_SPEED * 0.1
+
+        /* mouse attraction */
         const dx = mx - p.x
         const dy = my - p.y
         const dist = Math.sqrt(dx * dx + dy * dy)
-        const pullRadius = 200
 
-        if (dist < pullRadius) {
-          const force = (1 - dist / pullRadius) * 0.04
+        if (dist < PULL_RADIUS) {
+          const force = (1 - dist / PULL_RADIUS) * PULL_STRENGTH
           p.vx += dx * force
           p.vy += dy * force
         }
 
         /* return to base position */
-        p.vx += (p.baseX - p.x) * 0.008
-        p.vy += (p.baseY - p.y) * 0.008
+        p.vx += (p.baseX - p.x) * RETURN_FORCE
+        p.vy += (p.baseY - p.y) * RETURN_FORCE
 
         /* damping */
-        p.vx *= 0.92
-        p.vy *= 0.92
+        p.vx *= DAMPING
+        p.vy *= DAMPING
 
         p.x += p.vx
         p.y += p.vy
