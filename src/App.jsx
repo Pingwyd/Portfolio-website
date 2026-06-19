@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import './App.css'
 
 const projects = [
@@ -80,6 +80,7 @@ const skills = [
 ]
 
 function App() {
+  const [activeSection, setActiveSection] = useState('hero')
   const heroCardRef = useRef(null)
   const shineRef = useRef(null)
   const sectionsRef = useRef([])
@@ -139,6 +140,26 @@ function App() {
     return () => targets.forEach((t) => observer.unobserve(t))
   }, [])
 
+  /* ---- Active section tracking ---- */
+  useEffect(() => {
+    const sections = ['hero', 'skills', 'projects', 'contact']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.3, rootMargin: '-72px 0px -40% 0px' }
+    )
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
   /* ---- Click ripple ---- */
   useEffect(() => {
     const handleClick = (e) => {
@@ -193,9 +214,9 @@ function App() {
         <div className="container">
           <a href="#hero" className="nav-logo">Olaoye Prosper</a>
           <ul className="nav-links">
-            <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollTo('skills') }}>Skills</a></li>
-            <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('projects') }}>Projects</a></li>
-            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('contact') }}>Contact</a></li>
+            <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollTo('skills') }} className={activeSection === 'skills' ? 'active' : ''}>Skills</a></li>
+            <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('projects') }} className={activeSection === 'projects' ? 'active' : ''}>Projects</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('contact') }} className={activeSection === 'contact' ? 'active' : ''}>Contact</a></li>
             <li><a href="https://github.com/Pingwyd" target="_blank" rel="noopener noreferrer" className="nav-cta">GitHub</a></li>
           </ul>
         </div>

@@ -33,9 +33,25 @@
   color: var(--text-dim);
   transition: color 0.25s;
   letter-spacing: 0.2px;
+  position: relative;
+  padding-bottom: 4px;
 }
 .nav-links a:hover {
   color: #fff;
+}
+.nav-links a.active {
+  color: #fff;
+  position: relative;
+}
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
 }
 .nav-cta {
   padding: 9px 22px;
