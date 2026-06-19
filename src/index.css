@@ -1,0 +1,247 @@
+:root {
+  --bg: #08080c;
+  --bg-card: #111118;
+  --bg-elevated: #16161f;
+  --border: #1e1e2a;
+  --border-light: #2a2a3a;
+  --text: #a0a0b0;
+  --text-light: #e0e0e8;
+  --text-dim: #5a5a6e;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dim: #b45309;
+  --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  font-family: var(--sans);
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ===== ANIMATIONS ===== */
+
+/* Scroll-reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Glass shine */
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 24px;
+}
+
+/* Click ripple */
+.click-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(0);
+  animation: ripple-expand 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-expand {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Pulse on globe dots */
+.globe-dot {
+  animation: dot-pulse 3s ease-in-out infinite;
+}
+.globe-dot:nth-child(5) { animation-delay: 0.8s; }
+.globe-dot:nth-child(6) { animation-delay: 1.6s; }
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* Globe ring rotate */
+.globe-ring {
+  animation: ring-spin 20s linear infinite;
+}
+.globe-ring:nth-child(3) {
+  animation-direction: reverse;
+  animation-duration: 28s;
+}
+@keyframes ring-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Skill pills stagger */
+.skill-pill {
+  animation: pill-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes pill-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Nav logo hover */
+.nav-logo {
+  transition: opacity 0.2s;
+}
+.nav-logo:hover {
+  opacity: 0.7;
+}
+
+/* Button press feedback */
+.btn:active,
+.contact-btn:active,
+.nav-cta:active {
+  transform: scale(0.97) !important;
+  transition-duration: 0.08s;
+}
+
+/* Project card smooth tilt */
+.project-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s,
+              background 0.25s;
+}
+
+/* Hero card entrance */
+.hero-card {
+  animation: hero-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero text stagger */
+.hero-greeting {
+  animation: fade-up 0.5s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-text h1 {
+  animation: fade-up 0.6s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-text .tagline {
+  animation: fade-up 0.6s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-actions {
+  animation: fade-up 0.6s 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero visual float */
+.hero-visual {
+  animation: hero-visual-enter 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes hero-visual-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.hero-globe {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Contact card entrance */
+.contact-inner {
+  animation-delay: 0.1s;
+}
+
+/* Focus styles for accessibility */
+.btn:focus-visible,
+.contact-btn:focus-visible,
+.nav-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
