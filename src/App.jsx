@@ -124,8 +124,8 @@ function App() {
     }
     window.addEventListener('mousemove', handleMouseMove)
 
-    const PARTICLE_COUNT = 60
-    const TRAIL_COUNT = 12
+    const PARTICLE_COUNT = 80
+    const TRAIL_COUNT = 14
     const particles = []
     const trail = []
 
@@ -135,8 +135,8 @@ function App() {
         y: Math.random() * window.innerHeight,
         baseX: Math.random() * window.innerWidth,
         baseY: Math.random() * window.innerHeight,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.4 + 0.1,
+        size: Math.random() * 1.8 + 0.4,
+        opacity: Math.random() * 0.25 + 0.08,
         vx: 0,
         vy: 0,
       })
@@ -165,7 +165,7 @@ function App() {
         if (t.opacity < 0.01) continue
         ctx.beginPath()
         ctx.arc(t.x, t.y, 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(245, 158, 11, ${t.opacity * 0.6})`
+        ctx.fillStyle = `rgba(245, 158, 11, ${t.opacity * 0.45})`
         ctx.fill()
       }
 
