@@ -151,7 +151,7 @@ function App() {
           }
         })
       },
-      { threshold: 0.3, rootMargin: '-72px 0px -40% 0px' }
+      { threshold: 0.15, rootMargin: '-72px 0px -20% 0px' }
     )
     sections.forEach((id) => {
       const el = document.getElementById(id)
@@ -214,8 +214,8 @@ function App() {
         <div className="container">
           <a href="#hero" className="nav-logo">Olaoye Prosper</a>
           <ul className="nav-links">
-            <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollTo('skills') }} className={activeSection === 'skills' ? 'active' : ''}>Skills</a></li>
             <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('projects') }} className={activeSection === 'projects' ? 'active' : ''}>Projects</a></li>
+            <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollTo('skills') }} className={activeSection === 'skills' ? 'active' : ''}>Skills</a></li>
             <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('contact') }} className={activeSection === 'contact' ? 'active' : ''}>Contact</a></li>
             <li><a href="https://github.com/Pingwyd" target="_blank" rel="noopener noreferrer" className="nav-cta">GitHub</a></li>
           </ul>
