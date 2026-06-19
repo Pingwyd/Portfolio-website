@@ -144,12 +144,22 @@ function App() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['hero', 'skills', 'projects', 'contact']
-      const offset = 120
+      const navHeight = 72
       let current = 'hero'
+      let bestScore = -Infinity
       for (const id of sections) {
         const el = document.getElementById(id)
         if (!el) continue
-        if (el.getBoundingClientRect().top <= offset) {
+        const rect = el.getBoundingClientRect()
+        const top = rect.top
+        const bottom = rect.bottom
+        if (bottom < navHeight) continue
+        const visibleTop = Math.max(top, navHeight)
+        const visibleBottom = Math.min(bottom, window.innerHeight)
+        const visible = Math.max(0, visibleBottom - visibleTop)
+        const score = visible / rect.height
+        if (score > bestScore) {
+          bestScore = score
           current = id
         }
       }
