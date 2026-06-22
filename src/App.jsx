@@ -124,13 +124,13 @@ function App() {
     }
     window.addEventListener('mousemove', handleMouseMove)
 
-    const PARTICLE_COUNT = 500
+    const PARTICLE_COUNT = 400
     const TRAIL_COUNT = 20
-    const DRIFT_SPEED = 0.6        // constant movement speed of particles
-    const DRIFT_WANDER = 0.06      // how much particles change direction randomly
+    const DRIFT_SPEED = 1        // constant movement speed of particles
+    const DRIFT_WANDER = 0.08      // how much particles change direction randomly
     const PULL_RADIUS = 200        // mouse attraction radius (px)
     const PULL_STRENGTH = 0.04     // how strongly mouse pulls particles
-    const RETURN_FORCE = 0.002     // how fast particles drift back to base position
+    const RETURN_FORCE = 0.001     // how fast particles drift back to base position
     const DAMPING = 0.94           // velocity decay (lower = more drag)
     const particles = []
     const trail = []
@@ -141,7 +141,7 @@ function App() {
         y: Math.random() * window.innerHeight,
         baseX: Math.random() * window.innerWidth,
         baseY: Math.random() * window.innerHeight,
-        size: Math.random() * 1.8 + 0.4,
+        size: Math.random() * 1.8 + 0.8,
         opacity: Math.random() * 0.25 + 0.08,
         vx: (Math.random() - 0.5) * DRIFT_SPEED,
         vy: (Math.random() - 0.5) * DRIFT_SPEED,
