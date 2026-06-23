@@ -10,7 +10,7 @@ const projects = [
     description:
       "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
     skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
-    github: "https://github.com/",
+    github: "https://github.com/Pingwyd",
     private: true,
   },
 
@@ -81,11 +81,13 @@ const skills = [
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
+  const [menuOpen, setMenuOpen] = useState(false)
   const canvasRef = useRef(null)
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const cardsRef = useRef([])
 
   const scrollTo = (id) => {
+    setMenuOpen(false)
     const el = document.getElementById(id)
     if (!el) return
     const y = el.getBoundingClientRect().top + window.pageYOffset - 80
@@ -123,6 +125,16 @@ function App() {
       mouseRef.current = { x: e.clientX, y: e.clientY }
     }
     window.addEventListener('mousemove', handleMouseMove)
+
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0]
+      mouseRef.current = { x: touch.clientX, y: touch.clientY }
+    }
+    const handleTouchEnd = () => {
+      mouseRef.current = { x: -1000, y: -1000 }
+    }
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd)
 
     const PARTICLE_COUNT = 400
     const TRAIL_COUNT = 20
@@ -219,6 +231,8 @@ function App() {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
     }
   }, [])
 
@@ -289,8 +303,11 @@ function App() {
     return () => document.removeEventListener('click', handleClick)
   }, [])
 
-  /* ---- Tilt on project cards ---- */
+  /* ---- Tilt on project cards (desktop only) ---- */
   useEffect(() => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    if (isTouchDevice) return
+
     const cards = document.querySelectorAll('.project-card')
     cards.forEach((card) => {
       const handleEnter = () => { card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)' }
@@ -325,7 +342,16 @@ function App() {
       <nav className="navbar">
         <div className="container">
           <a href="#hero" className="nav-logo">Olaoye Prosper</a>
-          <ul className="nav-links">
+          <button
+            className={`nav-toggle ${menuOpen ? 'open' : ''}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
             <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('projects') }} className={activeSection === 'projects' ? 'active' : ''}>Projects</a></li>
             <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollTo('skills') }} className={activeSection === 'skills' ? 'active' : ''}>Skills</a></li>
             <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('contact') }} className={activeSection === 'contact' ? 'active' : ''}>Contact</a></li>
@@ -333,6 +359,7 @@ function App() {
           </ul>
         </div>
       </nav>
+      {menuOpen && <div className="nav-overlay" onClick={() => setMenuOpen(false)} />}
 
       {/* Hero */}
       <section id="hero" className="hero">
@@ -394,7 +421,21 @@ function App() {
           </p>
           <div className="projects-list">
             {projects.map((p, i) => (
-              <div key={i} className="project-card reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
+              <div
+                key={i}
+                className="project-card reveal"
+                style={{ transitionDelay: `${i * 0.08}s` }}
+                role="link"
+                tabIndex={0}
+                aria-label={`View ${p.title} on GitHub`}
+                onClick={() => window.open(p.github, '_blank', 'noopener,noreferrer')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    window.open(p.github, '_blank', 'noopener,noreferrer')
+                  }
+                }}
+              >
                 <div className="project-left">
                   <div className="project-top">
                     <span className="project-title">{p.title}</span>
@@ -407,16 +448,9 @@ function App() {
                       <span key={s}>{s}</span>
                     ))}
                   </div>
-                </div>
-                <div className="project-right">
-                  <a
-                    href={p.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-link"
-                  >
-                    {p.private ? 'Private' : 'Source →'}
-                  </a>
+                  <span className="project-view-hint">
+                    {p.private ? 'View Profile →' : 'View on GitHub →'}
+                  </span>
                 </div>
               </div>
             ))}
