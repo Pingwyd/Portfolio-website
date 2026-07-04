@@ -298,6 +298,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .skill-pill-more:hover {
   background: rgba(245, 158, 11, 0.15);

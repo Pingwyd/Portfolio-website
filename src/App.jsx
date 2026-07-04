@@ -92,7 +92,7 @@ function App() {
                   {skills.slice(0, 8).map((s, i) => (
                     <span key={s} className="skill-pill" style={{ animationDelay: `${i * 0.05}s` }}>{s}</span>
                   ))}
-                  <span className="skill-pill-more" style={{ animationDelay: '0.4s' }} onClick={() => scrollTo('skills')}>+{skills.length - 8}</span>
+                  <span className="skill-pill-more" style={{ animationDelay: '0.4s' }} onClick={() => scrollTo('skills')}>+{skills.length - 8} <ArrowRight size={12} /></span>
                 </div>
               </div>
             </div>

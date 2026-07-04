@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 
-const PARTICLE_COUNT = 200
+const PARTICLE_COUNT = 100
 const TRAIL_COUNT = 20
 const DRIFT_SPEED = 1
 const DRIFT_WANDER = 0.08
@@ -22,6 +22,10 @@ export default function useParticleCanvas() {
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      for (const p of particles) {
+        p.baseX = Math.random() * canvas.width
+        p.baseY = Math.random() * canvas.height
+      }
     }
     resize()
     window.addEventListener('resize', resize)
