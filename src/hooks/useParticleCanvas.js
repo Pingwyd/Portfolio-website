@@ -19,6 +19,27 @@ export default function useParticleCanvas() {
     const ctx = canvas.getContext('2d')
     let animId
 
+    const particles = []
+    const trail = []
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        baseX: Math.random() * window.innerWidth,
+        baseY: Math.random() * window.innerHeight,
+        size: Math.random() * 1.8 + 0.8,
+        opacity: Math.random() * 0.25 + 0.08,
+        vx: (Math.random() - 0.5) * DRIFT_SPEED,
+        vy: (Math.random() - 0.5) * DRIFT_SPEED,
+        angle: Math.random() * Math.PI * 2,
+      })
+    }
+
+    for (let i = 0; i < TRAIL_COUNT; i++) {
+      trail.push({ x: -1000, y: -1000, opacity: 0 })
+    }
+
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -44,27 +65,6 @@ export default function useParticleCanvas() {
     }
     window.addEventListener('touchmove', handleTouchMove, { passive: true })
     window.addEventListener('touchend', handleTouchEnd)
-
-    const particles = []
-    const trail = []
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        baseX: Math.random() * window.innerWidth,
-        baseY: Math.random() * window.innerHeight,
-        size: Math.random() * 1.8 + 0.8,
-        opacity: Math.random() * 0.25 + 0.08,
-        vx: (Math.random() - 0.5) * DRIFT_SPEED,
-        vy: (Math.random() - 0.5) * DRIFT_SPEED,
-        angle: Math.random() * Math.PI * 2,
-      })
-    }
-
-    for (let i = 0; i < TRAIL_COUNT; i++) {
-      trail.push({ x: -1000, y: -1000, opacity: 0 })
-    }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
