@@ -1,90 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
+import { Mail, ExternalLink, Globe, Menu, X, ArrowRight } from 'lucide-react'
+import useParticleCanvas from './hooks/useParticleCanvas'
+import useActiveSection from './hooks/useActiveSection'
+import useClickRipple from './hooks/useClickRipple'
+import useCardTilt from './hooks/useCardTilt'
+import useScrollReveal from './hooks/useScrollReveal'
+import { projects, skills } from './data'
 import './App.css'
 
-const projects = [
-  {
-    title: "Loyalty Card App",
-    badge: "Client Work",
-    badgeClass: "badge-client",
-    meta: "May 2026 – Present",
-    description:
-      "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
-    skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
-    github: "https://github.com/Pingwyd",
-    private: true,
-  },
-
-  {
-    title: "Hospitality Unit Bot",
-    badge: "Freelance Project",
-    badgeClass: "badge-freelance",
-    meta: "Oct 2025 – Nov 2025",
-    description:
-      "Built a Telegram bot to streamline and optimize posting activities for the protocol subunit in the Hospitality Unit. Integrated auto-scheduled posting that saved time and ensured proper participation, increasing user engagement by ~45% in pilot testing.",
-    skills: ["Python", "SQLite", "Telegram Bot API", "GitHub Copilot"],
-    github: "https://github.com/Pingwyd/Hospi-bot",
-  },
-
-  {    
-    title: "Car Park Allocation System",
-    badge: "Team Member",
-    badgeClass: "badge-team",
-    meta: "Ota, Ogun State · July 2025",
-    description:
-      "Developed an information system to automatically allocate parking spaces to workers using QR codes with embedded employee information. Tracks Employee ID, Name, Department, check-in/check-out times. Worked on database integration (defining schema, tables, relationships) and QR code development.",
-    skills: ["Python", "SQLite", "Flask", "QRcode", "OpenCV", "pyzbar", "Pillow"],
-    github: "https://github.com/Pingwyd/Car-park-Allocation-System",
-  },
-
-  { 
-    title: "Nudge",
-    badge: "Personal",
-    badgeClass: "badge-personal",
-    meta: "March 2026 – Present",
-    description:
-      "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
-    skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
-    github: "https://github.com/Pingwyd/Nudge",
-  },
-
-  {
-    title: "Employee Management System",
-    badge: "Personal",
-    badgeClass: "badge-personal",
-    meta: "Oct 2025 – Nov 2025",
-    description:
-      "Built a RESTful Employee Management System with 3-layer architecture (Controller, Service, Repository) handling HR operations across Admin, Manager, and Employee roles. Secured with JWT authentication, RBAC, and BCrypt password encryption. Implemented email verification with OTP dispatch via SMTP.",
-    skills: ["Spring Boot", "Spring Data JPA", "PostgreSQL", "JWT", "BCrypt", "SMTP"],
-    github: "https://github.com/Pingwyd/EmployeeManagementSystem",
-  },
-  {
-    title: "Farm Labor Connect",
-    badge: "Hackathon",
-    badgeClass: "badge-group",
-    meta: "2025",
-    description:
-      "Handled backend for a web app connecting farmers with agricultural workers using Flask and SQLAlchemy. Implemented RBAC (Admin, Farmer, Laborer), 2FA, BCrypt hashing, CSRF protection, XSS sanitization, encrypted document storage, and Interswitch payment API integration.",
-    skills: ["Flask", "SQLAlchemy", "PostgreSQL", "2FA", "BCrypt", "CSRF", "Fernet", "Interswitch API"],
-    github: "https://github.com/Pingwyd/Farm-Labor-Connect",
-  },
-  
-  
-]
-
-const skills = [
-  "Python", "Flask", "FastAPI", "Spring Boot", "Java",
-  "PostgreSQL", "SQLite", "SQLAlchemy", "JPA",
-  "JWT", "RBAC", "BCrypt", "WebSockets",
-  "REST APIs", "CI/CD", "GitHub Actions",
-  "PyQt6", "OpenCV", "Docker", "Git",
-]
-
 function App() {
-  const [activeSection, setActiveSection] = useState('hero')
+  const canvasRef = useParticleCanvas()
+  const activeSection = useActiveSection()
   const [menuOpen, setMenuOpen] = useState(false)
-  const canvasRef = useRef(null)
-  const mouseRef = useRef({ x: -1000, y: -1000 })
-  const cardsRef = useRef([])
+
+  useClickRipple()
+  useCardTilt()
+  useScrollReveal()
 
   const scrollTo = (id) => {
     setMenuOpen(false)
@@ -107,233 +38,6 @@ function App() {
     requestAnimationFrame(step)
   }
 
-  /* ---- Full-page particle canvas ---- */
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    let animId
-
-    const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const handleMouseMove = (e) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY }
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-
-    const handleTouchMove = (e) => {
-      const touch = e.touches[0]
-      mouseRef.current = { x: touch.clientX, y: touch.clientY }
-    }
-    const handleTouchEnd = () => {
-      mouseRef.current = { x: -1000, y: -1000 }
-    }
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('touchend', handleTouchEnd)
-
-    const PARTICLE_COUNT = 400
-    const TRAIL_COUNT = 20
-    const DRIFT_SPEED = 1        // constant movement speed of particles
-    const DRIFT_WANDER = 0.08      // how much particles change direction randomly
-    const PULL_RADIUS = 200        // mouse attraction radius (px)
-    const PULL_STRENGTH = 0.04     // how strongly mouse pulls particles
-    const RETURN_FORCE = 0.001     // how fast particles drift back to base position
-    const DAMPING = 0.94           // velocity decay (lower = more drag)
-    const particles = []
-    const trail = []
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        baseX: Math.random() * window.innerWidth,
-        baseY: Math.random() * window.innerHeight,
-        size: Math.random() * 1.8 + 0.8,
-        opacity: Math.random() * 0.25 + 0.08,
-        vx: (Math.random() - 0.5) * DRIFT_SPEED,
-        vy: (Math.random() - 0.5) * DRIFT_SPEED,
-        angle: Math.random() * Math.PI * 2,
-      })
-    }
-
-    for (let i = 0; i < TRAIL_COUNT; i++) {
-      trail.push({ x: -1000, y: -1000, opacity: 0 })
-    }
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const mx = mouseRef.current.x
-      const my = mouseRef.current.y
-
-      /* trail dots follow cursor with delay */
-      for (let i = trail.length - 1; i > 0; i--) {
-        trail[i].x += (trail[i - 1].x - trail[i].x) * 0.35
-        trail[i].y += (trail[i - 1].y - trail[i].y) * 0.35
-        trail[i].opacity = trail[i - 1].opacity * 0.7
-      }
-      trail[0].x += (mx - trail[0].x) * 0.5
-      trail[0].y += (my - trail[0].y) * 0.5
-      trail[0].opacity = 1
-
-      for (const t of trail) {
-        if (t.opacity < 0.01) continue
-        ctx.beginPath()
-        ctx.arc(t.x, t.y, 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(245, 158, 11, ${t.opacity * 0.45})`
-        ctx.fill()
-      }
-
-      /* scattered particles attracted to cursor */
-      for (const p of particles) {
-        /* constant wandering drift */
-        p.angle += (Math.random() - 0.5) * DRIFT_WANDER * 2
-        p.vx += Math.cos(p.angle) * DRIFT_SPEED * 0.2
-        p.vy += Math.sin(p.angle) * DRIFT_SPEED * 0.2
-
-        /* mouse attraction */
-        const dx = mx - p.x
-        const dy = my - p.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-
-        if (dist < PULL_RADIUS) {
-          const force = (1 - dist / PULL_RADIUS) * PULL_STRENGTH
-          p.vx += dx * force
-          p.vy += dy * force
-        }
-
-        /* return to base position */
-        p.vx += (p.baseX - p.x) * RETURN_FORCE
-        p.vy += (p.baseY - p.y) * RETURN_FORCE
-
-        /* damping */
-        p.vx *= DAMPING
-        p.vy *= DAMPING
-
-        p.x += p.vx
-        p.y += p.vy
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(245, 158, 11, ${p.opacity})`
-        ctx.fill()
-      }
-
-      animId = requestAnimationFrame(animate)
-    }
-    animate()
-
-    return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('touchend', handleTouchEnd)
-    }
-  }, [])
-
-  /* ---- Scroll-reveal with IntersectionObserver ---- */
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    )
-
-    const targets = document.querySelectorAll('.reveal')
-    targets.forEach((t) => observer.observe(t))
-    return () => targets.forEach((t) => observer.unobserve(t))
-  }, [])
-
-  /* ---- Active section tracking ---- */
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['hero', 'skills', 'projects', 'contact']
-      const navHeight = 72
-      let current = 'hero'
-      let bestScore = -Infinity
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        const rect = el.getBoundingClientRect()
-        const top = rect.top
-        const bottom = rect.bottom
-        if (bottom < navHeight) continue
-        const visibleTop = Math.max(top, navHeight)
-        const visibleBottom = Math.min(bottom, window.innerHeight)
-        const visible = Math.max(0, visibleBottom - visibleTop)
-        const score = visible / rect.height
-        if (score > bestScore) {
-          bestScore = score
-          current = id
-        }
-      }
-      setActiveSection(current)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  /* ---- Click ripple ---- */
-  useEffect(() => {
-    const handleClick = (e) => {
-      const btn = e.target.closest('.btn, .contact-btn, .nav-cta')
-      if (!btn) return
-      const ripple = document.createElement('span')
-      ripple.className = 'click-ripple'
-      const rect = btn.getBoundingClientRect()
-      const size = Math.max(rect.width, rect.height)
-      ripple.style.width = ripple.style.height = `${size}px`
-      ripple.style.left = `${e.clientX - rect.left - size / 2}px`
-      ripple.style.top = `${e.clientY - rect.top - size / 2}px`
-      btn.appendChild(ripple)
-      ripple.addEventListener('animationend', () => ripple.remove())
-    }
-    document.addEventListener('click', handleClick)
-    return () => document.removeEventListener('click', handleClick)
-  }, [])
-
-  /* ---- Tilt on project cards (desktop only) ---- */
-  useEffect(() => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-    if (isTouchDevice) return
-
-    const cards = document.querySelectorAll('.project-card')
-    cards.forEach((card) => {
-      const handleEnter = () => { card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)' }
-      const handleMove = (e) => {
-        const rect = card.getBoundingClientRect()
-        const x = (e.clientX - rect.left) / rect.width - 0.5
-        const y = (e.clientY - rect.top) / rect.height - 0.5
-        card.style.transform = `perspective(800px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg)`
-      }
-      const handleLeave = () => {
-        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)'
-      }
-      card.addEventListener('mouseenter', handleEnter)
-      card.addEventListener('mousemove', handleMove)
-      card.addEventListener('mouseleave', handleLeave)
-      cardsRef.current.push({ card, handleEnter, handleMove, handleLeave })
-    })
-    return () => {
-      cardsRef.current.forEach(({ card, handleEnter, handleMove, handleLeave }) => {
-        card.removeEventListener('mouseenter', handleEnter)
-        card.removeEventListener('mousemove', handleMove)
-        card.removeEventListener('mouseleave', handleLeave)
-      })
-    }
-  }, [])
-
   return (
     <>
       <canvas ref={canvasRef} className="particle-canvas"></canvas>
@@ -347,9 +51,7 @@ function App() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
-            <span></span>
-            <span></span>
-            <span></span>
+            {menuOpen ? <X size={22} color="#e0e0e8" /> : <Menu size={22} color="#e0e0e8" />}
           </button>
           <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
             <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('projects') }} className={activeSection === 'projects' ? 'active' : ''}>Projects</a></li>
@@ -421,20 +123,14 @@ function App() {
           </p>
           <div className="projects-list">
             {projects.map((p, i) => (
-              <div
+              <a
                 key={i}
+                href={p.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="project-card reveal"
                 style={{ transitionDelay: `${i * 0.08}s` }}
-                role="link"
-                tabIndex={0}
                 aria-label={`View ${p.title} on GitHub`}
-                onClick={() => window.open(p.github, '_blank', 'noopener,noreferrer')}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    window.open(p.github, '_blank', 'noopener,noreferrer')
-                  }
-                }}
               >
                 <div className="project-left">
                   <div className="project-top">
@@ -449,17 +145,17 @@ function App() {
                     ))}
                   </div>
                   <span className="project-view-hint">
-                    {p.private ? 'View Profile →' : 'View on GitHub →'}
+                    {p.private ? 'View Profile' : 'View on GitHub'}
+                    <ArrowRight size={14} />
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-
-        {/* Skills */}
+      {/* Skills */}
       <section id="skills" className="skills-section">
         <div className="container">
           <p className="section-eyebrow reveal">Tech Stack</p>
@@ -477,7 +173,6 @@ function App() {
         </div>
       </section>
 
-
       {/* Contact */}
       <section id="contact" className="contact">
         <div className="container">
@@ -489,15 +184,15 @@ function App() {
             </p>
             <div className="contact-links">
               <a href="mailto:prosperolaoye0@gmail.com" className="contact-btn">
-                <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm0 0l10 7 10-7"/></svg>
+                <Mail size={18} />
                 prosperolaoye0@gmail.com
               </a>
               <a href="https://github.com/Pingwyd" target="_blank" rel="noopener noreferrer" className="contact-btn">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.33.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>
+                <ExternalLink size={18} />
                 GitHub
               </a>
               <a href="https://www.linkedin.com/in/prosper-olaoye-1184b630b/" target="_blank" rel="noopener noreferrer" className="contact-btn">
-                <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <Globe size={18} />
                 LinkedIn
               </a>
             </div>
