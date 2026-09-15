@@ -49,18 +49,6 @@ export const projects = [
   },
 
   {
-    title: "Nudge",
-    badge: "Personal",
-    badgeClass: "badge-personal",
-    meta: "March 2026 - Present",
-    featured: true,
-    description:
-      "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
-    skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
-    link: "https://github.com/Pingwyd/Nudge",
-    thumbnail: "/thumbnails/nudge.png",
-  },
-  {
     title: "Employee Management System",
     badge: "Personal",
     badgeClass: "badge-personal",
@@ -80,6 +68,18 @@ export const projects = [
       "A prompt optimizer that holds context on a given project so prompts stay relevant to what you're actually building. Designed to reduce repetitive context setup across development sessions.",
     skills: ["Python", "LLM APIs"],
     link: "https://github.com/Pingwyd/opti",
+  },
+  {
+    title: "Nudge",
+    badge: "Personal",
+    badgeClass: "badge-personal",
+    meta: "March 2026 - Present",
+    featured: true,
+    description:
+      "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
+    skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
+    link: "https://github.com/Pingwyd/Nudge",
+    thumbnail: "/thumbnails/nudge.png",
   },
   {
     title: "LlamaBox",
