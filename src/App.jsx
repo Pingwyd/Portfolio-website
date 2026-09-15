@@ -9,8 +9,8 @@ import useTruncation from './hooks/useTruncation'
 import { projects, skillCategories, process } from './data'
 import './App.css'
 
-function TruncatedDesc({ text, index, openTooltip, setOpenTooltip }) {
-  const { ref, isTruncated } = useTruncation(50)
+function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTooltip }) {
+  const { ref, isTruncated } = useTruncation()
   const tooltipRef = useRef(null)
   const isOpen = openTooltip === index
 
@@ -50,6 +50,8 @@ function TruncatedDesc({ text, index, openTooltip, setOpenTooltip }) {
     setOpenTooltip((prev) => (prev === index ? null : index))
   }
 
+  const hasThumb = Boolean(thumbnail)
+
   return (
     <div className="desc-tooltip-anchor">
       <p
@@ -65,13 +67,24 @@ function TruncatedDesc({ text, index, openTooltip, setOpenTooltip }) {
       {isTruncated && (
         <div
           ref={tooltipRef}
-          className={`desc-tooltip${isOpen ? ' open' : ''}`}
+          className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}`}
           role="tooltip"
         >
           <button className="desc-tooltip-close" onClick={close} aria-label="Close tooltip">
             <X size={14} />
           </button>
-          {text}
+          {hasThumb && (
+            <div className="desc-tooltip-thumb">
+              <img
+                src={thumbnail}
+                alt={`${title} preview`}
+                loading="lazy"
+                width="360"
+                height="202"
+              />
+            </div>
+          )}
+          <p className="desc-tooltip-text">{text}</p>
         </div>
       )}
     </div>
@@ -192,6 +205,8 @@ function App() {
                   <p className="project-meta">{p.meta}</p>
                   <TruncatedDesc
                     text={p.description}
+                    title={p.title}
+                    thumbnail={p.thumbnail}
                     index={i}
                     openTooltip={openTooltip}
                     setOpenTooltip={setOpenTooltip}

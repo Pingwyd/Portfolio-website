@@ -9,6 +9,7 @@ export const projects = [
     skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
     link: "https://github.com/Pingwyd",
     private: true,
+    thumbnail: "/thumbnails/loyalty-card.png",
   },
   {
     title: "Hospitality Unit Bot",
@@ -41,6 +42,7 @@ export const projects = [
       "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
     skills: ["Python", "FastAPI", "PostgreSQL"],
     link: "https://digitalnurse.com.ng",
+    thumbnail: "/thumbnails/digital-nurse.png",
   },
 
   {
@@ -52,6 +54,7 @@ export const projects = [
       "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
     skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
     link: "https://github.com/Pingwyd/Nudge",
+    thumbnail: "/thumbnails/nudge.png",
   },
   {
     title: "Employee Management System",
@@ -62,6 +65,7 @@ export const projects = [
       "Built a RESTful Employee Management System with 3-layer architecture (Controller, Service, Repository) handling HR operations across Admin, Manager, and Employee roles. Secured with JWT authentication, RBAC, and BCrypt password encryption. Implemented email verification with OTP dispatch via SMTP.",
     skills: ["Spring Boot", "Spring Data JPA", "PostgreSQL", "JWT", "BCrypt", "SMTP"],
     link: "https://github.com/Pingwyd/EmployeeManagementSystem",
+    thumbnail: "/thumbnails/employee-ms.png",
   },
   
   {

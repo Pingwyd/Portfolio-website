@@ -10,33 +10,35 @@ export default function useTruncation() {
 
     const clampedHeight = el.clientHeight
 
-    el.style.webkitLineClamp = 'none'
-    el.style.webkitBoxOrient = 'unset'
-    el.style.display = 'block'
-    el.style.overflow = 'visible'
-    el.style.height = 'auto'
+    const clone = el.cloneNode(true)
+    clone.style.position = 'absolute'
+    clone.style.visibility = 'hidden'
+    clone.style.height = 'auto'
+    clone.style.maxHeight = 'none'
+    clone.style.display = 'block'
+    clone.style.webkitLineClamp = 'unset'
+    clone.style.webkitBoxOrient = ''
+    clone.style.overflow = 'visible'
+    clone.style.width = el.clientWidth + 'px'
+    el.parentNode.appendChild(clone)
 
-    const fullHeight = el.scrollHeight
-
-    el.style.webkitLineClamp = ''
-    el.style.webkitBoxOrient = ''
-    el.style.display = ''
-    el.style.overflow = ''
-    el.style.height = ''
+    const fullHeight = clone.scrollHeight
+    el.parentNode.removeChild(clone)
 
     setIsTruncated(fullHeight > clampedHeight + 4)
   }, [])
 
   useEffect(() => {
-    check()
-    let timer
+    const timer = setTimeout(check, 60)
+    let resizeTimer
     const onResize = () => {
-      clearTimeout(timer)
-      timer = setTimeout(check, 180)
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(check, 180)
     }
     window.addEventListener('resize', onResize)
     return () => {
       clearTimeout(timer)
+      clearTimeout(resizeTimer)
       window.removeEventListener('resize', onResize)
     }
   }, [check])
