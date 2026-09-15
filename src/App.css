@@ -309,7 +309,6 @@
   display: block;
   width: 100%;
   height: auto;
-  object-fit: cover;
 }
 .project-featured-number {
   font-family: var(--font-display);
@@ -334,7 +333,6 @@
   .project-featured-thumb {
     flex: 0 0 35%;
     max-width: 35%;
-    max-height: 280px;
   }
   .project-featured-text .project-featured-number {
     font-size: 64px;
