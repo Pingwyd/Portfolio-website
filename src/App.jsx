@@ -13,13 +13,40 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
   const { ref, isTruncated } = useTruncation()
   const tooltipRef = useRef(null)
   const isOpen = openTooltip === index
+  const [tooltipStyle, setTooltipStyle] = useState({})
 
   const close = useCallback(() => {
     setOpenTooltip((prev) => (prev === index ? null : prev))
   }, [index, setOpenTooltip])
 
+  const positionTooltip = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const tooltipWidth = thumbnail ? 380 : 340
+    const gap = 10
+
+    let left = rect.left
+    let top = rect.top - gap
+    let flipped = false
+
+    if (top - 200 < 0) {
+      flipped = true
+      top = rect.bottom + gap
+    }
+
+    if (left + tooltipWidth > window.innerWidth - 16) {
+      left = window.innerWidth - tooltipWidth - 16
+    }
+    if (left < 16) left = 16
+
+    setTooltipStyle({ top, left, flipped })
+  }, [ref, thumbnail])
+
   useEffect(() => {
     if (!isOpen) return
+    positionTooltip()
+
     const onKey = (e) => {
       if (e.key === 'Escape') close()
     }
@@ -41,7 +68,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
       document.removeEventListener('mousedown', onClick)
       document.removeEventListener('touchstart', onClick)
     }
-  }, [isOpen, close, ref])
+  }, [isOpen, close, ref, positionTooltip])
 
   const toggle = (e) => {
     e.preventDefault()
@@ -67,8 +94,9 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
       {isTruncated && (
         <div
           ref={tooltipRef}
-          className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}`}
+          className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}${tooltipStyle.flipped ? ' flipped' : ''}`}
           role="tooltip"
+          style={{ top: tooltipStyle.top, left: tooltipStyle.left }}
         >
           <button className="desc-tooltip-close" onClick={close} aria-label="Close tooltip">
             <X size={14} />
