@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Mail, ExternalLink, Globe, Menu, X, ArrowRight } from 'lucide-react'
 import useParticleCanvas from './hooks/useParticleCanvas'
 import useActiveSection from './hooks/useActiveSection'
@@ -8,14 +8,8 @@ import useScrollReveal from './hooks/useScrollReveal'
 import { projects, skillCategories, process } from './data'
 import './App.css'
 
-function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTooltip }) {
-  const isOpen = openTooltip === index
+function ProjectModal({ text, title, thumbnail, isOpen, onClose }) {
   const [imgExpanded, setImgExpanded] = useState(false)
-
-  const close = useCallback(() => {
-    setOpenTooltip((prev) => (prev === index ? null : prev))
-    setImgExpanded(false)
-  }, [index, setOpenTooltip])
 
   useEffect(() => {
     if (!isOpen) return
@@ -24,7 +18,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
         if (imgExpanded) {
           setImgExpanded(false)
         } else {
-          close()
+          onClose()
         }
       }
     }
@@ -34,40 +28,30 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [isOpen, close, imgExpanded])
+  }, [isOpen, onClose, imgExpanded])
 
-  const handleDotClick = (e) => {
-    e.stopPropagation()
-    setOpenTooltip((prev) => (prev === index ? null : index))
-  }
+  if (!isOpen) return null
 
   const hasThumb = Boolean(thumbnail)
 
   return (
     <>
-      <button
-        className="desc-dot"
-        onClick={handleDotClick}
-        aria-label="Read more"
-      />
-      {isOpen && (
-        <div className="desc-overlay" onClick={close}>
-          <div className="desc-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="desc-modal-close" onClick={close} aria-label="Close">
-              <X size={20} />
-            </button>
-            {hasThumb && (
-              <div className="desc-modal-thumb" onClick={() => setImgExpanded(true)}>
-                <img src={thumbnail} alt={`${title} preview`} loading="lazy" />
-              </div>
-            )}
-            <div className="desc-modal-body">
-              <h3 className="desc-modal-title">{title}</h3>
-              <p className="desc-modal-text">{text}</p>
+      <div className="desc-overlay" onClick={onClose}>
+        <div className="desc-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="desc-modal-close" onClick={onClose} aria-label="Close">
+            <X size={20} />
+          </button>
+          {hasThumb && (
+            <div className="desc-modal-thumb" onClick={() => setImgExpanded(true)}>
+              <img src={thumbnail} alt={`${title} preview`} loading="lazy" />
             </div>
+          )}
+          <div className="desc-modal-body">
+            <h3 className="desc-modal-title">{title}</h3>
+            <p className="desc-modal-text">{text}</p>
           </div>
         </div>
-      )}
+      </div>
       {imgExpanded && hasThumb && (
         <div className="lightbox-overlay" onClick={() => setImgExpanded(false)}>
           <button className="lightbox-close" onClick={() => setImgExpanded(false)} aria-label="Close image">
@@ -176,13 +160,14 @@ function App() {
           <div className="projects-list">
             {projects.map((p, i) => {
               const isTruncated = p.description.length > 120
+              const isModalOpen = openTooltip === i
               return (
                 <div key={i} className="project-card-wrapper">
                   <a
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`project-card reveal${isTruncated ? '' : ''}`}
+                    className="project-card reveal"
                     style={{ transitionDelay: `${i * 0.08}s` }}
                     aria-label={`View ${p.title}`}
                   >
@@ -193,10 +178,18 @@ function App() {
                         <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
                       </div>
                       <p className="project-meta">{p.meta}</p>
-                      {isTruncated ? (
-                        <p className="project-desc">{p.description}</p>
-                      ) : (
-                        <p className="project-desc">{p.description}</p>
+                      <p className="project-desc">{p.description}</p>
+                      {isTruncated && (
+                        <span
+                          className="desc-read-more"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            setOpenTooltip(i)
+                          }}
+                        >
+                          Read more <ArrowRight size={12} />
+                        </span>
                       )}
                       <div className="project-stack">
                         {p.skills.map((s) => (
@@ -210,15 +203,22 @@ function App() {
                     </div>
                   </a>
                   {isTruncated && (
-                    <TruncatedDesc
-                      text={p.description}
-                      title={p.title}
-                      thumbnail={p.thumbnail}
-                      index={i}
-                      openTooltip={openTooltip}
-                      setOpenTooltip={setOpenTooltip}
+                    <button
+                      className="desc-dot"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setOpenTooltip(i)
+                      }}
+                      aria-label="Read more"
                     />
                   )}
+                  <ProjectModal
+                    text={p.description}
+                    title={p.title}
+                    thumbnail={p.thumbnail}
+                    isOpen={isModalOpen}
+                    onClose={() => setOpenTooltip(null)}
+                  />
                 </div>
               )
             })}
