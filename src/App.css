@@ -364,7 +364,7 @@
 
 /* Desc anchor + dot indicator */
 .desc-anchor {
-  position: relative;
+  /* no position: relative so .desc-dot positions relative to .project-card */
 }
 .desc-dot {
   position: absolute;

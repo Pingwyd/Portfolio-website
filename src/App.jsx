@@ -3,7 +3,7 @@ import { Mail, ExternalLink, Globe, Menu, X, ArrowRight } from 'lucide-react'
 import useParticleCanvas from './hooks/useParticleCanvas'
 import useActiveSection from './hooks/useActiveSection'
 import useClickRipple from './hooks/useClickRipple'
-import useCardTilt from './hooks/useCardTilt'
+
 import useScrollReveal from './hooks/useScrollReveal'
 import { projects, skillCategories, process } from './data'
 import './App.css'
@@ -76,10 +76,6 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
     setOpenTooltip((prev) => (prev === index ? null : index))
   }
 
-  const handleDotHover = () => {
-    setOpenTooltip((prev) => (prev === index ? null : index))
-  }
-
   const hasThumb = Boolean(thumbnail)
 
   if (!isTruncated) {
@@ -87,13 +83,12 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
   }
 
   return (
-    <div className="desc-anchor">
+    <>
       <p className="project-desc">{text}</p>
       <button
         ref={dotRef}
         className="desc-dot"
         onClick={handleDotClick}
-        onMouseEnter={handleDotHover}
         aria-label="Read more"
       />
       <div
@@ -122,7 +117,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
         )}
         <p className="desc-tooltip-text">{text}</p>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -133,7 +128,6 @@ function App() {
   const [openTooltip, setOpenTooltip] = useState(null)
 
   useClickRipple()
-  useCardTilt()
   useScrollReveal()
 
   const scrollTo = (id) => {
