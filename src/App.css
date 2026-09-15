@@ -365,26 +365,23 @@
 /* Desc dot indicator */
 .desc-dot {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 8px;
-  height: 8px;
-  min-width: 8px;
-  min-height: 8px;
+  bottom: 14px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
   border-radius: 50%;
   background: var(--accent);
   border: none;
   padding: 0;
   cursor: pointer;
-  opacity: 0.35;
+  opacity: 0.5;
   transition: opacity 0.2s, transform 0.2s;
   z-index: 2;
 }
-.desc-anchor:hover .desc-dot {
-  opacity: 0.8;
-}
 .desc-dot:hover {
-  opacity: 1 !important;
+  opacity: 1;
   transform: scale(1.3);
 }
 /* Expand tap target on mobile */
@@ -417,6 +414,7 @@
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
+  margin: auto;
 }
 .desc-modal-close {
   position: absolute;
@@ -451,6 +449,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: zoom-in;
 }
 .desc-modal-body {
   padding: 28px 32px 32px;
@@ -468,17 +467,59 @@
   color: var(--text);
 }
 
+/* Image lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+.lightbox-overlay img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6);
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 @media (max-width: 640px) {
   .desc-overlay {
     padding: 16px;
-    align-items: flex-end;
+    align-items: center;
   }
   .desc-modal {
     max-height: 85vh;
-    border-radius: 16px 16px 0 0;
   }
   .desc-modal-body {
     padding: 24px 20px 28px;
+  }
+  .lightbox-overlay {
+    padding: 12px;
   }
 }
 .project-stack {

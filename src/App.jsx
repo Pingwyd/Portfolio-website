@@ -10,15 +10,23 @@ import './App.css'
 
 function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTooltip }) {
   const isOpen = openTooltip === index
+  const [imgExpanded, setImgExpanded] = useState(false)
 
   const close = useCallback(() => {
     setOpenTooltip((prev) => (prev === index ? null : prev))
+    setImgExpanded(false)
   }, [index, setOpenTooltip])
 
   useEffect(() => {
     if (!isOpen) return
     const onKey = (e) => {
-      if (e.key === 'Escape') close()
+      if (e.key === 'Escape') {
+        if (imgExpanded) {
+          setImgExpanded(false)
+        } else {
+          close()
+        }
+      }
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
@@ -26,7 +34,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [isOpen, close])
+  }, [isOpen, close, imgExpanded])
 
   const handleDotClick = (e) => {
     e.stopPropagation()
@@ -49,7 +57,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
               <X size={20} />
             </button>
             {hasThumb && (
-              <div className="desc-modal-thumb">
+              <div className="desc-modal-thumb" onClick={() => setImgExpanded(true)}>
                 <img src={thumbnail} alt={`${title} preview`} loading="lazy" />
               </div>
             )}
@@ -58,6 +66,14 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
               <p className="desc-modal-text">{text}</p>
             </div>
           </div>
+        </div>
+      )}
+      {imgExpanded && hasThumb && (
+        <div className="lightbox-overlay" onClick={() => setImgExpanded(false)}>
+          <button className="lightbox-close" onClick={() => setImgExpanded(false)} aria-label="Close image">
+            <X size={20} />
+          </button>
+          <img src={thumbnail} alt={`${title} preview`} />
         </div>
       )}
     </>
