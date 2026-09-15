@@ -19,6 +19,7 @@ export const projects = [
       "Built a Telegram bot to streamline and optimize posting activities for the protocol subunit in the Hospitality Unit. Integrated auto-scheduled posting that saved time and ensured proper participation, increasing user engagement by ~45% in pilot testing.",
     skills: ["Python", "SQLite", "Telegram Bot API", "GitHub Copilot"],
     github: "https://github.com/Pingwyd/Hospi-bot",
+    thumbnail: null,
   },
   {
     title: "Car Park Allocation System",
@@ -49,6 +50,7 @@ export const projects = [
       "Built a RESTful Employee Management System with 3-layer architecture (Controller, Service, Repository) handling HR operations across Admin, Manager, and Employee roles. Secured with JWT authentication, RBAC, and BCrypt password encryption. Implemented email verification with OTP dispatch via SMTP.",
     skills: ["Spring Boot", "Spring Data JPA", "PostgreSQL", "JWT", "BCrypt", "SMTP"],
     github: "https://github.com/Pingwyd/EmployeeManagementSystem",
+    thumbnail: null,
   },
   {
     title: "Farm Labor Connect",
@@ -59,13 +61,44 @@ export const projects = [
       "Handled backend for a web app connecting farmers with agricultural workers using Flask and SQLAlchemy. Implemented RBAC (Admin, Farmer, Laborer), 2FA, BCrypt hashing, CSRF protection, XSS sanitization, encrypted document storage, and Interswitch payment API integration.",
     skills: ["Flask", "SQLAlchemy", "PostgreSQL", "2FA", "BCrypt", "CSRF", "Fernet", "Interswitch API"],
     github: "https://github.com/Pingwyd/Farm-Labor-Connect",
+    thumbnail: null,
   },
 ]
 
-export const skills = [
-  "Python", "Flask", "FastAPI", "Spring Boot", "Java",
-  "PostgreSQL", "SQLite", "SQLAlchemy", "JPA",
-  "JWT", "RBAC", "BCrypt", "WebSockets",
-  "REST APIs", "CI/CD", "GitHub Actions",
-  "PyQt6", "OpenCV", "Docker", "Git",
+export const skillCategories = [
+  {
+    label: "Languages",
+    skills: ["Python", "Java"],
+  },
+  {
+    label: "Frameworks & Libraries",
+    skills: ["Flask", "FastAPI", "Spring Boot", "SQLAlchemy", "JPA", "PyQt6", "OpenCV"],
+  },
+  {
+    label: "Tools & Infrastructure",
+    skills: ["PostgreSQL", "SQLite", "Docker", "Git", "JWT", "RBAC", "BCrypt", "WebSockets", "REST APIs", "CI/CD", "GitHub Actions"],
+  },
+]
+
+export const process = [
+  {
+    step: "01",
+    title: "Discover",
+    description: "Understanding goals, requirements, and constraints before writing a line of code.",
+  },
+  {
+    step: "02",
+    title: "Design",
+    description: "Architecture, database schema, and API contracts that scale.",
+  },
+  {
+    step: "03",
+    title: "Build",
+    description: "Clean, tested, production-ready code with proper error handling.",
+  },
+  {
+    step: "04",
+    title: "Ship",
+    description: "Deploy, monitor, and iterate based on real usage.",
+  },
 ]

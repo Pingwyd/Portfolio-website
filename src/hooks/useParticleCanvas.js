@@ -1,11 +1,11 @@
 import { useRef, useEffect } from 'react'
 
-const PARTICLE_COUNT = 100
-const TRAIL_COUNT = 20
-const DRIFT_SPEED = 1
-const DRIFT_WANDER = 0.08
-const PULL_RADIUS = 200
-const PULL_STRENGTH = 0.04
+const PARTICLE_COUNT = 60
+const TRAIL_COUNT = 15
+const DRIFT_SPEED = 0.5
+const DRIFT_WANDER = 0.04
+const PULL_RADIUS = 150
+const PULL_STRENGTH = 0.02
 const RETURN_FORCE = 0.001
 const DAMPING = 0.94
 
@@ -28,8 +28,8 @@ export default function useParticleCanvas() {
         y: Math.random() * window.innerHeight,
         baseX: Math.random() * window.innerWidth,
         baseY: Math.random() * window.innerHeight,
-        size: Math.random() * 1.8 + 0.8,
-        opacity: Math.random() * 0.25 + 0.08,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.15 + 0.05,
         vx: (Math.random() - 0.5) * DRIFT_SPEED,
         vy: (Math.random() - 0.5) * DRIFT_SPEED,
         angle: Math.random() * Math.PI * 2,
@@ -84,7 +84,7 @@ export default function useParticleCanvas() {
         if (t.opacity < 0.01) continue
         ctx.beginPath()
         ctx.arc(t.x, t.y, 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(245, 158, 11, ${t.opacity * 0.45})`
+        ctx.fillStyle = `rgba(20, 184, 166, ${t.opacity * 0.4})`
         ctx.fill()
       }
 
@@ -114,7 +114,7 @@ export default function useParticleCanvas() {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(245, 158, 11, ${p.opacity})`
+        ctx.fillStyle = `rgba(20, 184, 166, ${p.opacity})`
         ctx.fill()
       }
 
