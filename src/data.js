@@ -45,6 +45,7 @@ export const projects = [
     skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
     link: "https://github.com/Pingwyd",
     private: true,
+    thumbnail: "/thumbnails/loyalty-card.png",
   },
 
   {
@@ -57,6 +58,7 @@ export const projects = [
       "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
     skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
     link: "https://github.com/Pingwyd/Nudge",
+    thumbnail: "/thumbnails/nudge.png",
   },
   {
     title: "Employee Management System",
