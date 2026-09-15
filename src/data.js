@@ -7,7 +7,7 @@ export const projects = [
     description:
       "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
     skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
-    github: "https://github.com/Pingwyd",
+    link: "https://github.com/Pingwyd",
     private: true,
   },
   {
@@ -18,8 +18,7 @@ export const projects = [
     description:
       "Built a Telegram bot to streamline and optimize posting activities for the protocol subunit in the Hospitality Unit. Integrated auto-scheduled posting that saved time and ensured proper participation, increasing user engagement by ~45% in pilot testing.",
     skills: ["Python", "SQLite", "Telegram Bot API", "GitHub Copilot"],
-    github: "https://github.com/Pingwyd/Hospi-bot",
-    thumbnail: null,
+    link: "https://github.com/Pingwyd/Hospi-bot",
   },
   {
     title: "Car Park Allocation System",
@@ -29,7 +28,7 @@ export const projects = [
     description:
       "Developed an information system to automatically allocate parking spaces to workers using QR codes with embedded employee information. Tracks Employee ID, Name, Department, check-in/check-out times. Worked on database integration (defining schema, tables, relationships) and QR code development.",
     skills: ["Python", "SQLite", "Flask", "QRcode", "OpenCV", "pyzbar", "Pillow"],
-    github: "https://github.com/Pingwyd/Car-park-Allocation-System",
+    link: "https://github.com/Pingwyd/Car-park-Allocation-System",
   },
   {
     title: "Nudge",
@@ -39,7 +38,7 @@ export const projects = [
     description:
       "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
     skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
-    github: "https://github.com/Pingwyd/Nudge",
+    link: "https://github.com/Pingwyd/Nudge",
   },
   {
     title: "Employee Management System",
@@ -49,8 +48,7 @@ export const projects = [
     description:
       "Built a RESTful Employee Management System with 3-layer architecture (Controller, Service, Repository) handling HR operations across Admin, Manager, and Employee roles. Secured with JWT authentication, RBAC, and BCrypt password encryption. Implemented email verification with OTP dispatch via SMTP.",
     skills: ["Spring Boot", "Spring Data JPA", "PostgreSQL", "JWT", "BCrypt", "SMTP"],
-    github: "https://github.com/Pingwyd/EmployeeManagementSystem",
-    thumbnail: null,
+    link: "https://github.com/Pingwyd/EmployeeManagementSystem",
   },
   {
     title: "Farm Labor Connect",
@@ -60,8 +58,37 @@ export const projects = [
     description:
       "Handled backend for a web app connecting farmers with agricultural workers using Flask and SQLAlchemy. Implemented RBAC (Admin, Farmer, Laborer), 2FA, BCrypt hashing, CSRF protection, XSS sanitization, encrypted document storage, and Interswitch payment API integration.",
     skills: ["Flask", "SQLAlchemy", "PostgreSQL", "2FA", "BCrypt", "CSRF", "Fernet", "Interswitch API"],
-    github: "https://github.com/Pingwyd/Farm-Labor-Connect",
-    thumbnail: null,
+    link: "https://github.com/Pingwyd/Farm-Labor-Connect",
+  },
+  {
+    title: "Digital Nurse",
+    badge: "SIWES Project",
+    badgeClass: "badge-siwes",
+    meta: "2025",
+    description:
+      "A support platform for pregnant women, providing guidance and resources alongside hospitals, midwives, and nurses. Live at digitalnurse.com.ng.",
+    skills: ["Python", "FastAPI", "PostgreSQL"],
+    link: "https://digitalnurse.com.ng",
+  },
+  {
+    title: "Opti",
+    badge: "Personal",
+    badgeClass: "badge-personal",
+    meta: "2025",
+    description:
+      "A prompt optimizer that holds context on a given project so prompts stay relevant to what you're actually building. Designed to reduce repetitive context setup across development sessions.",
+    skills: ["Python", "LLM APIs"],
+    link: "https://github.com/Pingwyd/opti",
+  },
+  {
+    title: "LlamaBox",
+    badge: "Personal",
+    badgeClass: "badge-personal",
+    meta: "2025",
+    description:
+      "An Electron wrapper for llama.cpp, allowing you to run it as a standalone desktop application instead of in a browser or terminal.",
+    skills: ["Electron", "Node.js", "C++"],
+    link: "https://github.com/Pingwyd/Llamabox",
   },
 ]
 

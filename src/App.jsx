@@ -105,12 +105,12 @@ function App() {
             {projects.map((p, i) => (
               <a
                 key={i}
-                href={p.github}
+                href={p.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="project-card reveal"
                 style={{ transitionDelay: `${i * 0.08}s` }}
-                aria-label={`View ${p.title} on GitHub`}
+                aria-label={`View ${p.title}`}
               >
                 <div className="project-content">
                   <div className="project-top">
@@ -126,7 +126,7 @@ function App() {
                     ))}
                   </div>
                   <span className="project-view-hint">
-                    {p.private ? 'View Profile' : 'View on GitHub'}
+                    {p.private ? 'View Profile' : 'View'}
                     <ArrowRight size={14} />
                   </span>
                 </div>
