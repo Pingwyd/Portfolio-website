@@ -111,8 +111,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(20, 184, 166, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 184, 166, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(20, 184, 166, 0.10) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(20, 184, 166, 0.10) 1.5px, transparent 1.5px);
   background-size: 80px 80px;
   pointer-events: none;
 }
@@ -281,7 +281,6 @@
 }
 .project-card:hover {
   border-color: var(--border-light);
-  background: var(--bg-elevated);
 }
 .project-card:hover::before {
   height: 100%;

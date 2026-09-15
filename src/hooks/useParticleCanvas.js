@@ -10,9 +10,9 @@ const RETURN_FORCE = 0.001
 const DAMPING = 0.94
 
 const ORBS = [
-  { rx: 0.15, ry: 0.3, size: 120, r: 20, g: 184, b: 166, opacity: 0.04, speed: 0.08 },
-  { rx: 0.8, ry: 0.6, size: 180, r: 245, g: 158, b: 11, opacity: 0.03, speed: 0.05 },
-  { rx: 0.5, ry: 0.85, size: 100, r: 20, g: 184, b: 166, opacity: 0.03, speed: 0.06 },
+  { rx: 0.15, ry: 0.3, size: 160, r: 20, g: 184, b: 166, opacity: 0.10, speed: 0.08 },
+  { rx: 0.8, ry: 0.6, size: 240, r: 245, g: 158, b: 11, opacity: 0.08, speed: 0.05 },
+  { rx: 0.5, ry: 0.85, size: 140, r: 20, g: 184, b: 166, opacity: 0.08, speed: 0.06 },
 ]
 
 export default function useParticleCanvas() {

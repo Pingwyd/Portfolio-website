@@ -62,8 +62,8 @@ export const projects = [
   },
   {
     title: "Digital Nurse",
-    badge: "SIWES Project",
-    badgeClass: "badge-siwes",
+    badge: "Hackathon",
+    badgeClass: "badge-group",
     meta: "2025",
     description:
       "A support platform for pregnant women, providing guidance and resources alongside hospitals, midwives, and nurses. Live at digitalnurse.com.ng.",
