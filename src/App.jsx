@@ -1,17 +1,88 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Mail, ExternalLink, Globe, Menu, X, ArrowRight } from 'lucide-react'
 import useParticleCanvas from './hooks/useParticleCanvas'
 import useActiveSection from './hooks/useActiveSection'
 import useClickRipple from './hooks/useClickRipple'
 import useCardTilt from './hooks/useCardTilt'
 import useScrollReveal from './hooks/useScrollReveal'
+import useTruncation from './hooks/useTruncation'
 import { projects, skillCategories, process } from './data'
 import './App.css'
+
+function TruncatedDesc({ text, index, openTooltip, setOpenTooltip }) {
+  const { ref, isTruncated } = useTruncation(50)
+  const tooltipRef = useRef(null)
+  const isOpen = openTooltip === index
+
+  const close = useCallback(() => {
+    setOpenTooltip((prev) => (prev === index ? null : prev))
+  }, [index, setOpenTooltip])
+
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') close()
+    }
+    const onClick = (e) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target) &&
+        ref.current &&
+        !ref.current.contains(e.target)
+      ) {
+        close()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onClick)
+    document.addEventListener('touchstart', onClick)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('touchstart', onClick)
+    }
+  }, [isOpen, close, ref])
+
+  const toggle = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!isTruncated) return
+    setOpenTooltip((prev) => (prev === index ? null : index))
+  }
+
+  return (
+    <div className="desc-tooltip-anchor">
+      <p
+        ref={ref}
+        className={`project-desc${isTruncated ? ' truncated' : ''}`}
+        onClick={toggle}
+        role={isTruncated ? 'button' : undefined}
+        tabIndex={isTruncated ? 0 : undefined}
+        onKeyDown={isTruncated ? (e) => { if (e.key === 'Enter' || e.key === ' ') toggle(e) } : undefined}
+      >
+        {text}
+      </p>
+      {isTruncated && (
+        <div
+          ref={tooltipRef}
+          className={`desc-tooltip${isOpen ? ' open' : ''}`}
+          role="tooltip"
+        >
+          <button className="desc-tooltip-close" onClick={close} aria-label="Close tooltip">
+            <X size={14} />
+          </button>
+          {text}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function App() {
   const canvasRef = useParticleCanvas()
   const activeSection = useActiveSection()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [openTooltip, setOpenTooltip] = useState(null)
 
   useClickRipple()
   useCardTilt()
@@ -119,7 +190,12 @@ function App() {
                     <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
                   </div>
                   <p className="project-meta">{p.meta}</p>
-                  <p className="project-desc">{p.description}</p>
+                  <TruncatedDesc
+                    text={p.description}
+                    index={i}
+                    openTooltip={openTooltip}
+                    setOpenTooltip={setOpenTooltip}
+                  />
                   <div className="project-stack">
                     {p.skills.map((s) => (
                       <span key={s}>{s}</span>

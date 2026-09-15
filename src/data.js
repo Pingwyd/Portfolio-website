@@ -20,16 +20,29 @@ export const projects = [
     skills: ["Python", "SQLite", "Telegram Bot API", "GitHub Copilot"],
     link: "https://github.com/Pingwyd/Hospi-bot",
   },
+
   {
-    title: "Car Park Allocation System",
-    badge: "Team Member",
-    badgeClass: "badge-team",
-    meta: "Ota, Ogun State - July 2025",
+    title: "Farm Labor Connect",
+    badge: "Hackathon",
+    badgeClass: "badge-group",
+    meta: "2025",
     description:
-      "Developed an information system to automatically allocate parking spaces to workers using QR codes with embedded employee information. Tracks Employee ID, Name, Department, check-in/check-out times. Worked on database integration (defining schema, tables, relationships) and QR code development.",
-    skills: ["Python", "SQLite", "Flask", "QRcode", "OpenCV", "pyzbar", "Pillow"],
-    link: "https://github.com/Pingwyd/Car-park-Allocation-System",
+      "Handled backend for a web app connecting farmers with agricultural workers using Flask and SQLAlchemy. Implemented RBAC (Admin, Farmer, Laborer), 2FA, BCrypt hashing, CSRF protection, XSS sanitization, encrypted document storage, and Interswitch payment API integration.",
+    skills: ["Flask", "SQLAlchemy", "PostgreSQL", "2FA", "BCrypt", "CSRF", "Fernet", "Interswitch API"],
+    link: "https://github.com/Pingwyd/Farm-Labor-Connect",
   },
+
+  {
+    title: "Digital Nurse",
+    badge: "HACKATHON WINNER",
+    badgeClass: "badge-winner",
+    meta: "2025",
+    description:
+      "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
+    skills: ["Python", "FastAPI", "PostgreSQL"],
+    link: "https://digitalnurse.com.ng",
+  },
+
   {
     title: "Nudge",
     badge: "Personal",
@@ -50,26 +63,7 @@ export const projects = [
     skills: ["Spring Boot", "Spring Data JPA", "PostgreSQL", "JWT", "BCrypt", "SMTP"],
     link: "https://github.com/Pingwyd/EmployeeManagementSystem",
   },
-  {
-    title: "Farm Labor Connect",
-    badge: "Hackathon",
-    badgeClass: "badge-group",
-    meta: "2025",
-    description:
-      "Handled backend for a web app connecting farmers with agricultural workers using Flask and SQLAlchemy. Implemented RBAC (Admin, Farmer, Laborer), 2FA, BCrypt hashing, CSRF protection, XSS sanitization, encrypted document storage, and Interswitch payment API integration.",
-    skills: ["Flask", "SQLAlchemy", "PostgreSQL", "2FA", "BCrypt", "CSRF", "Fernet", "Interswitch API"],
-    link: "https://github.com/Pingwyd/Farm-Labor-Connect",
-  },
-  {
-    title: "Digital Nurse",
-    badge: "HACKATHON WINNER",
-    badgeClass: "badge-winner",
-    meta: "2025",
-    description:
-      "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
-    skills: ["Python", "FastAPI", "PostgreSQL"],
-    link: "https://digitalnurse.com.ng",
-  },
+  
   {
     title: "Opti",
     badge: "Personal",
@@ -89,6 +83,17 @@ export const projects = [
       "An Electron wrapper for llama.cpp, allowing you to run it as a standalone desktop application instead of in a browser or terminal.",
     skills: ["Electron", "Node.js", "C++"],
     link: "https://github.com/Pingwyd/Llamabox",
+  },
+
+    {
+    title: "Car Park Allocation System",
+    badge: "Team Member",
+    badgeClass: "badge-team",
+    meta: "Ota, Ogun State - July 2025",
+    description:
+      "Developed an information system to automatically allocate parking spaces to workers using QR codes with embedded employee information. Tracks Employee ID, Name, Department, check-in/check-out times. Worked on database integration (defining schema, tables, relationships) and QR code development.",
+    skills: ["Python", "SQLite", "Flask", "QRcode", "OpenCV", "pyzbar", "Pillow"],
+    link: "https://github.com/Pingwyd/Car-park-Allocation-System",
   },
 ]
 
