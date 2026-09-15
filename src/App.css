@@ -362,10 +362,7 @@
   overflow: hidden;
 }
 
-/* Desc anchor + dot indicator */
-.desc-anchor {
-  /* no position: relative so .desc-dot positions relative to .project-card */
-}
+/* Desc dot indicator */
 .desc-dot {
   position: absolute;
   bottom: 12px;
@@ -397,99 +394,91 @@
   inset: -18px;
 }
 
-/* Tooltip */
-.desc-tooltip {
+/* Overlay modal */
+.desc-overlay {
   position: fixed;
-  width: 340px;
-  max-width: calc(100vw - 32px);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-light);
-  border-left: 2px solid var(--accent);
-  border-radius: 12px;
-  padding: 16px 18px;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  z-index: 155;
-  opacity: 0;
-  transform: translateY(4px);
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-}
-.desc-tooltip.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.desc-tooltip.flipped {
-  transform: translateY(0);
-}
-.desc-tooltip-close {
-  display: none;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  font-size: 16px;
-  z-index: 1;
-}
-.desc-tooltip.open .desc-tooltip-close {
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;
 }
-.desc-tooltip--with-thumb {
-  width: 380px;
-  padding: 0;
-  overflow: hidden;
+.desc-modal {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
 }
-.desc-tooltip-thumb {
+.desc-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+}
+.desc-modal-close:hover {
+  color: #fff;
+  border-color: var(--accent);
+}
+.desc-modal-thumb {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0;
   background: var(--bg-card);
 }
-.desc-tooltip-thumb img {
+.desc-modal-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.desc-tooltip-text {
-  padding: 14px 18px 16px;
-  font-size: 14px;
-  line-height: 1.7;
+.desc-modal-body {
+  padding: 28px 32px 32px;
+}
+.desc-modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.desc-modal-text {
+  font-size: 15px;
+  line-height: 1.8;
   color: var(--text);
 }
 
 @media (max-width: 640px) {
-  .desc-tooltip {
-    left: 16px !important;
-    right: 16px;
-    width: auto !important;
-    max-width: none;
-    top: 50% !important;
-    transform: translateY(-50%);
-    z-index: 200;
+  .desc-overlay {
+    padding: 16px;
+    align-items: flex-end;
   }
-  .desc-tooltip.open {
-    transform: translateY(-50%);
+  .desc-modal {
+    max-height: 85vh;
+    border-radius: 16px 16px 0 0;
   }
-  .desc-tooltip.flipped {
-    top: 50% !important;
-    transform: translateY(-50%);
-  }
-  .desc-tooltip .desc-tooltip-close {
-    display: flex;
+  .desc-modal-body {
+    padding: 24px 20px 28px;
   }
 }
 .project-stack {
@@ -800,7 +789,11 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  .project-card {
+.project-card-wrapper {
+  position: relative;
+}
+
+.project-card {
     padding: 20px;
     border-radius: 12px;
   }

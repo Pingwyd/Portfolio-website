@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Mail, ExternalLink, Globe, Menu, X, ArrowRight } from 'lucide-react'
 import useParticleCanvas from './hooks/useParticleCanvas'
 import useActiveSection from './hooks/useActiveSection'
@@ -9,114 +9,57 @@ import { projects, skillCategories, process } from './data'
 import './App.css'
 
 function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTooltip }) {
-  const dotRef = useRef(null)
-  const tooltipRef = useRef(null)
   const isOpen = openTooltip === index
-  const [tooltipStyle, setTooltipStyle] = useState({})
-  const isTruncated = text.length > 120
 
   const close = useCallback(() => {
     setOpenTooltip((prev) => (prev === index ? null : prev))
   }, [index, setOpenTooltip])
 
-  const positionTooltip = useCallback(() => {
-    const dot = dotRef.current
-    if (!dot) return
-    const rect = dot.getBoundingClientRect()
-    const tooltipWidth = thumbnail ? 380 : 340
-    const gap = 10
-
-    let left = rect.left - tooltipWidth + rect.width
-    let top = rect.top - gap
-    let flipped = false
-
-    if (top - 200 < 0) {
-      flipped = true
-      top = rect.bottom + gap
-    }
-
-    if (left + tooltipWidth > window.innerWidth - 16) {
-      left = window.innerWidth - tooltipWidth - 16
-    }
-    if (left < 16) left = 16
-
-    setTooltipStyle({ top, left, flipped })
-  }, [thumbnail])
-
   useEffect(() => {
     if (!isOpen) return
-    positionTooltip()
-
     const onKey = (e) => {
       if (e.key === 'Escape') close()
     }
-    const onClickOutside = (e) => {
-      if (
-        tooltipRef.current &&
-        !tooltipRef.current.contains(e.target) &&
-        dotRef.current &&
-        !dotRef.current.contains(e.target)
-      ) {
-        close()
-      }
-    }
     document.addEventListener('keydown', onKey)
-    document.addEventListener('mousedown', onClickOutside)
-    document.addEventListener('touchstart', onClickOutside)
+    document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.removeEventListener('mousedown', onClickOutside)
-      document.removeEventListener('touchstart', onClickOutside)
+      document.body.style.overflow = ''
     }
-  }, [isOpen, close, positionTooltip])
+  }, [isOpen, close])
 
   const handleDotClick = (e) => {
-    e.preventDefault()
     e.stopPropagation()
     setOpenTooltip((prev) => (prev === index ? null : index))
   }
 
   const hasThumb = Boolean(thumbnail)
 
-  if (!isTruncated) {
-    return <p className="project-desc">{text}</p>
-  }
-
   return (
     <>
-      <p className="project-desc">{text}</p>
       <button
-        ref={dotRef}
         className="desc-dot"
         onClick={handleDotClick}
         aria-label="Read more"
       />
-      <div
-        ref={tooltipRef}
-        className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}${tooltipStyle.flipped ? ' flipped' : ''}`}
-        role="tooltip"
-        style={{ top: tooltipStyle.top, left: tooltipStyle.left }}
-      >
-        <button
-          className="desc-tooltip-close"
-          onClick={(e) => { e.stopPropagation(); close() }}
-          aria-label="Close tooltip"
-        >
-          <X size={14} />
-        </button>
-        {hasThumb && (
-          <div className="desc-tooltip-thumb">
-            <img
-              src={thumbnail}
-              alt={`${title} preview`}
-              loading="lazy"
-              width="360"
-              height="202"
-            />
+      {isOpen && (
+        <div className="desc-overlay" onClick={close}>
+          <div className="desc-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="desc-modal-close" onClick={close} aria-label="Close">
+              <X size={20} />
+            </button>
+            {hasThumb && (
+              <div className="desc-modal-thumb">
+                <img src={thumbnail} alt={`${title} preview`} loading="lazy" />
+              </div>
+            )}
+            <div className="desc-modal-body">
+              <h3 className="desc-modal-title">{title}</h3>
+              <p className="desc-modal-text">{text}</p>
+            </div>
           </div>
-        )}
-        <p className="desc-tooltip-text">{text}</p>
-      </div>
+        </div>
+      )}
     </>
   )
 }
@@ -215,43 +158,54 @@ function App() {
             to production-ready systems.
           </p>
           <div className="projects-list">
-            {projects.map((p, i) => (
-              <a
-                key={i}
-                href={p.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project-card reveal"
-                style={{ transitionDelay: `${i * 0.08}s` }}
-                aria-label={`View ${p.title}`}
-              >
-                <div className="project-content">
-                  <div className="project-top">
-                    <span className="project-number">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="project-title">{p.title}</span>
-                    <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
-                  </div>
-                  <p className="project-meta">{p.meta}</p>
-                  <TruncatedDesc
-                    text={p.description}
-                    title={p.title}
-                    thumbnail={p.thumbnail}
-                    index={i}
-                    openTooltip={openTooltip}
-                    setOpenTooltip={setOpenTooltip}
-                  />
-                  <div className="project-stack">
-                    {p.skills.map((s) => (
-                      <span key={s}>{s}</span>
-                    ))}
-                  </div>
-                  <span className="project-view-hint">
-                    {p.private ? 'View Profile' : 'View'}
-                    <ArrowRight size={14} />
-                  </span>
+            {projects.map((p, i) => {
+              const isTruncated = p.description.length > 120
+              return (
+                <div key={i} className="project-card-wrapper">
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`project-card reveal${isTruncated ? '' : ''}`}
+                    style={{ transitionDelay: `${i * 0.08}s` }}
+                    aria-label={`View ${p.title}`}
+                  >
+                    <div className="project-content">
+                      <div className="project-top">
+                        <span className="project-number">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="project-title">{p.title}</span>
+                        <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
+                      </div>
+                      <p className="project-meta">{p.meta}</p>
+                      {isTruncated ? (
+                        <p className="project-desc">{p.description}</p>
+                      ) : (
+                        <p className="project-desc">{p.description}</p>
+                      )}
+                      <div className="project-stack">
+                        {p.skills.map((s) => (
+                          <span key={s}>{s}</span>
+                        ))}
+                      </div>
+                      <span className="project-view-hint">
+                        {p.private ? 'View Profile' : 'View'}
+                        <ArrowRight size={14} />
+                      </span>
+                    </div>
+                  </a>
+                  {isTruncated && (
+                    <TruncatedDesc
+                      text={p.description}
+                      title={p.title}
+                      thumbnail={p.thumbnail}
+                      index={i}
+                      openTooltip={openTooltip}
+                      setOpenTooltip={setOpenTooltip}
+                    />
+                  )}
                 </div>
-              </a>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
