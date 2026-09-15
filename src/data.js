@@ -62,11 +62,11 @@ export const projects = [
   },
   {
     title: "Digital Nurse",
-    badge: "Hackathon",
-    badgeClass: "badge-group",
+    badge: "HACKATHON WINNER",
+    badgeClass: "badge-winner",
     meta: "2025",
     description:
-      "A support platform for pregnant women, providing guidance and resources alongside hospitals, midwives, and nurses. Live at digitalnurse.com.ng.",
+      "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
     skills: ["Python", "FastAPI", "PostgreSQL"],
     link: "https://digitalnurse.com.ng",
   },

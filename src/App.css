@@ -111,8 +111,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(20, 184, 166, 0.10) 1.5px, transparent 1.5px),
-    linear-gradient(90deg, rgba(20, 184, 166, 0.10) 1.5px, transparent 1.5px);
+    linear-gradient(rgba(20, 184, 166, 0.05) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(20, 184, 166, 0.05) 1.5px, transparent 1.5px);
   background-size: 80px 80px;
   pointer-events: none;
 }
@@ -339,6 +339,10 @@
 .badge-group {
   background: rgba(59, 130, 246, 0.12);
   color: #60a5fa;
+}
+.badge-winner {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
 }
 .badge-siwes {
   background: rgba(20, 184, 166, 0.12);
