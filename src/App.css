@@ -832,9 +832,12 @@
   }
 .project-card-wrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card {
+  flex: 1;
     padding: 20px;
     border-radius: 12px;
   }
