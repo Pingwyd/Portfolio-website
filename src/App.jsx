@@ -5,28 +5,28 @@ import useActiveSection from './hooks/useActiveSection'
 import useClickRipple from './hooks/useClickRipple'
 import useCardTilt from './hooks/useCardTilt'
 import useScrollReveal from './hooks/useScrollReveal'
-import useTruncation from './hooks/useTruncation'
 import { projects, skillCategories, process } from './data'
 import './App.css'
 
 function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTooltip }) {
-  const { ref, isTruncated } = useTruncation()
+  const dotRef = useRef(null)
   const tooltipRef = useRef(null)
   const isOpen = openTooltip === index
   const [tooltipStyle, setTooltipStyle] = useState({})
+  const isTruncated = text.length > 120
 
   const close = useCallback(() => {
     setOpenTooltip((prev) => (prev === index ? null : prev))
   }, [index, setOpenTooltip])
 
   const positionTooltip = useCallback(() => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
+    const dot = dotRef.current
+    if (!dot) return
+    const rect = dot.getBoundingClientRect()
     const tooltipWidth = thumbnail ? 380 : 340
     const gap = 10
 
-    let left = rect.left
+    let left = rect.left - tooltipWidth + rect.width
     let top = rect.top - gap
     let flipped = false
 
@@ -41,7 +41,7 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
     if (left < 16) left = 16
 
     setTooltipStyle({ top, left, flipped })
-  }, [ref, thumbnail])
+  }, [thumbnail])
 
   useEffect(() => {
     if (!isOpen) return
@@ -50,71 +50,78 @@ function TruncatedDesc({ text, title, thumbnail, index, openTooltip, setOpenTool
     const onKey = (e) => {
       if (e.key === 'Escape') close()
     }
-    const onClick = (e) => {
+    const onClickOutside = (e) => {
       if (
         tooltipRef.current &&
         !tooltipRef.current.contains(e.target) &&
-        ref.current &&
-        !ref.current.contains(e.target)
+        dotRef.current &&
+        !dotRef.current.contains(e.target)
       ) {
         close()
       }
     }
     document.addEventListener('keydown', onKey)
-    document.addEventListener('mousedown', onClick)
-    document.addEventListener('touchstart', onClick)
+    document.addEventListener('mousedown', onClickOutside)
+    document.addEventListener('touchstart', onClickOutside)
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.removeEventListener('mousedown', onClick)
-      document.removeEventListener('touchstart', onClick)
+      document.removeEventListener('mousedown', onClickOutside)
+      document.removeEventListener('touchstart', onClickOutside)
     }
-  }, [isOpen, close, ref, positionTooltip])
+  }, [isOpen, close, positionTooltip])
 
-  const toggle = (e) => {
+  const handleDotClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!isTruncated) return
+    setOpenTooltip((prev) => (prev === index ? null : index))
+  }
+
+  const handleDotHover = () => {
     setOpenTooltip((prev) => (prev === index ? null : index))
   }
 
   const hasThumb = Boolean(thumbnail)
 
+  if (!isTruncated) {
+    return <p className="project-desc">{text}</p>
+  }
+
   return (
-    <div className="desc-tooltip-anchor">
-      <p
-        ref={ref}
-        className={`project-desc${isTruncated ? ' truncated' : ''}`}
-        onClick={toggle}
-        role={isTruncated ? 'button' : undefined}
-        tabIndex={isTruncated ? 0 : undefined}
-        onKeyDown={isTruncated ? (e) => { if (e.key === 'Enter' || e.key === ' ') toggle(e) } : undefined}
+    <div className="desc-anchor">
+      <p className="project-desc">{text}</p>
+      <button
+        ref={dotRef}
+        className="desc-dot"
+        onClick={handleDotClick}
+        onMouseEnter={handleDotHover}
+        aria-label="Read more"
+      />
+      <div
+        ref={tooltipRef}
+        className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}${tooltipStyle.flipped ? ' flipped' : ''}`}
+        role="tooltip"
+        style={{ top: tooltipStyle.top, left: tooltipStyle.left }}
       >
-        {text}
-      </p>
-      {isTruncated && (
-        <div
-          ref={tooltipRef}
-          className={`desc-tooltip${isOpen ? ' open' : ''}${hasThumb ? ' desc-tooltip--with-thumb' : ''}${tooltipStyle.flipped ? ' flipped' : ''}`}
-          role="tooltip"
-          style={{ top: tooltipStyle.top, left: tooltipStyle.left }}
+        <button
+          className="desc-tooltip-close"
+          onClick={(e) => { e.stopPropagation(); close() }}
+          aria-label="Close tooltip"
         >
-          <button className="desc-tooltip-close" onClick={close} aria-label="Close tooltip">
-            <X size={14} />
-          </button>
-          {hasThumb && (
-            <div className="desc-tooltip-thumb">
-              <img
-                src={thumbnail}
-                alt={`${title} preview`}
-                loading="lazy"
-                width="360"
-                height="202"
-              />
-            </div>
-          )}
-          <p className="desc-tooltip-text">{text}</p>
-        </div>
-      )}
+          <X size={14} />
+        </button>
+        {hasThumb && (
+          <div className="desc-tooltip-thumb">
+            <img
+              src={thumbnail}
+              alt={`${title} preview`}
+              loading="lazy"
+              width="360"
+              height="202"
+            />
+          </div>
+        )}
+        <p className="desc-tooltip-text">{text}</p>
+      </div>
     </div>
   )
 }
