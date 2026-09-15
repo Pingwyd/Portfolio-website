@@ -161,8 +161,10 @@ function App() {
             {projects.map((p, i) => {
               const isTruncated = p.description.length > 120
               const isModalOpen = openTooltip === i
+              const isFeatured = p.featured === true
+              const hasThumb = Boolean(p.thumbnail)
               return (
-                <div key={i} className="project-card-wrapper">
+                <div key={i} className={`project-card-wrapper${isFeatured ? ' project-card--featured' : ''}`}>
                   <a
                     href={p.link}
                     target="_blank"
@@ -171,36 +173,107 @@ function App() {
                     style={{ transitionDelay: `${i * 0.08}s` }}
                     aria-label={`View ${p.title}`}
                   >
-                    <div className="project-content">
-                      <div className="project-top">
-                        <span className="project-number">{String(i + 1).padStart(2, '0')}</span>
-                        <span className="project-title">{p.title}</span>
-                        <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
+                    {isFeatured && hasThumb ? (
+                      <div className="project-featured-layout">
+                        <div className="project-featured-thumb">
+                          <img src={p.thumbnail} alt={`${p.title} preview`} loading="lazy" />
+                        </div>
+                        <div className="project-content">
+                          <div className="project-top">
+                            <span className="project-number">{String(i + 1).padStart(2, '0')}</span>
+                            <span className="project-title">{p.title}</span>
+                            <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
+                          </div>
+                          <p className="project-meta">{p.meta}</p>
+                          <p className="project-desc">{p.description}</p>
+                          {isTruncated && (
+                            <span
+                              className="desc-view-more"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                setOpenTooltip(i)
+                              }}
+                            >
+                              View more <ArrowRight size={12} />
+                            </span>
+                          )}
+                          <div className="project-stack">
+                            {p.skills.map((s) => (
+                              <span key={s}>{s}</span>
+                            ))}
+                          </div>
+                          <span className="project-view-hint">
+                            {p.private ? 'View Profile' : 'View'}
+                            <ArrowRight size={14} />
+                          </span>
+                        </div>
                       </div>
-                      <p className="project-meta">{p.meta}</p>
-                      <p className="project-desc">{p.description}</p>
-                      {isTruncated && (
-                        <span
-                          className="desc-read-more"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            setOpenTooltip(i)
-                          }}
-                        >
-                          Read more <ArrowRight size={12} />
+                    ) : isFeatured ? (
+                      <div className="project-featured-layout project-featured-text">
+                        <div className="project-featured-number">{String(i + 1).padStart(2, '0')}</div>
+                        <div className="project-content">
+                          <div className="project-top">
+                            <span className="project-title project-title--featured">{p.title}</span>
+                            <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
+                          </div>
+                          <p className="project-meta">{p.meta}</p>
+                          <p className="project-desc">{p.description}</p>
+                          {isTruncated && (
+                            <span
+                              className="desc-view-more"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                setOpenTooltip(i)
+                              }}
+                            >
+                              View more <ArrowRight size={12} />
+                            </span>
+                          )}
+                          <div className="project-stack">
+                            {p.skills.map((s) => (
+                              <span key={s}>{s}</span>
+                            ))}
+                          </div>
+                          <span className="project-view-hint">
+                            {p.private ? 'View Profile' : 'View'}
+                            <ArrowRight size={14} />
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="project-content">
+                        <div className="project-top">
+                          <span className="project-number">{String(i + 1).padStart(2, '0')}</span>
+                          <span className="project-title">{p.title}</span>
+                          <span className={`project-badge ${p.badgeClass}`}>{p.badge}</span>
+                        </div>
+                        <p className="project-meta">{p.meta}</p>
+                        <p className="project-desc">{p.description}</p>
+                        {isTruncated && (
+                          <span
+                            className="desc-view-more"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              setOpenTooltip(i)
+                            }}
+                          >
+                            View more <ArrowRight size={12} />
+                          </span>
+                        )}
+                        <div className="project-stack">
+                          {p.skills.map((s) => (
+                            <span key={s}>{s}</span>
+                          ))}
+                        </div>
+                        <span className="project-view-hint">
+                          {p.private ? 'View Profile' : 'View'}
+                          <ArrowRight size={14} />
                         </span>
-                      )}
-                      <div className="project-stack">
-                        {p.skills.map((s) => (
-                          <span key={s}>{s}</span>
-                        ))}
                       </div>
-                      <span className="project-view-hint">
-                        {p.private ? 'View Profile' : 'View'}
-                        <ArrowRight size={14} />
-                      </span>
-                    </div>
+                    )}
                   </a>
                   {isTruncated && (
                     <button

@@ -4,6 +4,7 @@ export const projects = [
     badge: "Client Work",
     badgeClass: "badge-client",
     meta: "May 2026 - Present",
+    featured: true,
     description:
       "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
     skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
@@ -37,6 +38,7 @@ export const projects = [
     badge: "HACKATHON WINNER",
     badgeClass: "badge-winner",
     meta: "2025",
+    featured: true,
     description:
       "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
     skills: ["Python", "FastAPI", "PostgreSQL"],
@@ -49,6 +51,7 @@ export const projects = [
     badge: "Personal",
     badgeClass: "badge-personal",
     meta: "March 2026 - Present",
+    featured: true,
     description:
       "Cross-platform desktop productivity app built with Python and PyQt6 using a 3-layer architecture. Features persistent reminders, system tray integration, task groups with drag-and-drop, theming system (dark/light/OLED), auto-update pipeline via GitHub Releases, and CI/CD with GitHub Actions.",
     skills: ["Python", "PyQt6", "GitHub Actions", "CI/CD", "PyInstaller"],
