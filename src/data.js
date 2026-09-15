@@ -1,16 +1,17 @@
 export const projects = [
   {
-    title: "Loyalty Card App",
-    badge: "Client Work",
-    badgeClass: "badge-client",
-    meta: "May 2026 - Present",
+    title: "Digital Nurse",
+    badge: "HACKATHON WINNER",
+    badgeClass: "badge-winner",
+    meta: "2025",
     featured: true,
     description:
-      "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
-    skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
-    link: "https://github.com/Pingwyd",
-    private: true,
+      "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
+    skills: ["Python", "FastAPI", "PostgreSQL"],
+    link: "https://digitalnurse.com.ng",
+    thumbnail: "/thumbnails/digital-nurse.png",
   },
+
   {
     title: "Hospitality Unit Bot",
     badge: "Freelance Project",
@@ -34,16 +35,16 @@ export const projects = [
   },
 
   {
-    title: "Digital Nurse",
-    badge: "HACKATHON WINNER",
-    badgeClass: "badge-winner",
-    meta: "2025",
+    title: "Loyalty Card App",
+    badge: "Client Work",
+    badgeClass: "badge-client",
+    meta: "May 2026 - Present",
     featured: true,
     description:
-      "First place at Fintech Africa Launchpad Africa Demo Day, Cohort 2. A pregnancy companion app for Nigerian women, providing guidance and resources alongside hospitals, midwives, and nurses.",
-    skills: ["Python", "FastAPI", "PostgreSQL"],
-    link: "https://digitalnurse.com.ng",
-    thumbnail: "/thumbnails/digital-nurse.png",
+      "Full-stack loyalty card system with QR-based check-ins and real-time WebSocket updates. Role-based dashboards (Owner, Staff, Customer) with dark glassmorphism UI, staff scanner with camera selection, audit trail, JWT auth, RBAC, rate limiting with lockout, and self-scan prevention.",
+    skills: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Jinja2", "Bootstrap 5", "WebSockets", "JWT"],
+    link: "https://github.com/Pingwyd",
+    private: true,
   },
 
   {
